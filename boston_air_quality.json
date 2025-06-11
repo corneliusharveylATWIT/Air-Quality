@@ -1,0 +1,24 @@
+{
+    "city_name": "Boston",
+    "country_code": "US",
+    "data": [
+        {
+            "aqi": 80,
+            "co": 343,
+            "mold_level": 0,
+            "no2": 16,
+            "o3": 32,
+            "pm10": 38,
+            "pm25": 26,
+            "pollen_level_grass": 2,
+            "pollen_level_tree": 1,
+            "pollen_level_weed": 1,
+            "predominant_pollen_type": "Grasses",
+            "so2": 2
+        }
+    ],
+    "lat": "42.35843",
+    "lon": "-71.05977",
+    "state_code": "MA",
+    "timezone": "America/New_York"
+}
