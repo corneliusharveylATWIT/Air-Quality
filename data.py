@@ -1,24 +1,30 @@
+import streamlit as st
 import requests
-import json
-import csv
+import pandas as pd
 
-# Step 1: Define your API URL
+st.title("Boston Air Quality Dashboard")
+
+# Fetch data from API
 url = "https://api.weatherbit.io/v2.0/current/airquality?city=Boston&postal_code=02124&key=052396392e5145448e3e53ddc8722e0d"
-
-# Step 2: Get the response
 response = requests.get(url)
-data = response.json()
 
-# Step 3: Extract the data (usually under 'data' key)
-if "data" in data and isinstance(data["data"], list):
-    air_quality_data = data["data"][0]  # Get the first result
+if response.status_code == 200:
+    data = response.json()
 
-    # Step 4: Write to CSV
-    with open("boston_air_quality.csv", mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=air_quality_data.keys())
-        writer.writeheader()
-        writer.writerow(air_quality_data)
+    if "data" in data and isinstance(data["data"], list):
+        air_quality_data = data["data"][0]
 
-    print("✅ CSV file 'boston_air_quality.csv' created successfully.")
+        # Convert dict to dataframe (1-row)
+        df = pd.DataFrame([air_quality_data])
+
+        st.write("### Current Air Quality Data for Boston")
+        st.dataframe(df)
+
+        # Example: show a few key metrics nicely
+        st.metric("AQI (US EPA)", air_quality_data.get("aqius", "N/A"))
+        st.metric("PM2.5 (µg/m3)", air_quality_data.get("pm25", "N/A"))
+        st.metric("Ozone (ppb)", air_quality_data.get("o3", "N/A"))
+    else:
+        st.error("No valid air quality data found.")
 else:
-    print("❌ No valid air quality data found.")
+    st.error(f"Failed to fetch data from API. Status code: {response.status_code}")
